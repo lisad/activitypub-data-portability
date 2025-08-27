@@ -462,12 +462,11 @@
 
       <h3>OAuth Endpoint Discovery via Actor object</h3>
 
-      <p>ActivityPub servers supporting this specification MUST provide the URL for their portability authorization endpoint in Actor objects, using the "accountPortabilityOauth" field.</p>
+      <p>ActivityPub servers supporting this specification MUST provide the URL for their portability authorization endpoint in Actor objects by adding a value to the ActivityPub <a href="https://www.w3.org/TR/activitypub/#endpoints" target="_blank">endpoints property</a> labeled "oauthMigrationEndpoint".  NOTE: this is parallel to the <a href="https://www.w3.org/TR/activitypub/#oauthAuthorizationEndpoint" target="_blank">"oauthAuthorizationEndpoint"</a> property, which is used to generate other kinds of client OAuth tokens.</p>
 
-        <p>Example Actor object</p>
+      <p>Example Actor object</p>
 
-      <pre>
-  {
+      <pre>{
     "@context": [
         "https://www.w3.org/ns/activitystreams",
         "https://purl.archive.org/socialweb/blocked"
@@ -475,10 +474,12 @@
     "id": "https://oakfrost.example.com/brock",
     "type": "Person",
     "name": "Brock Oakfrost",
-    "accountPortabilityOauth": "https://example.com/oauth2/porting-access-endpoint",
     "inbox": "https://oakfrost.example.com/brock/inbox"
-  }
-      </pre>
+    "endpoints": {
+        "oauthAuthorizationEndpoint": "https://example.com/oauth2/standard-oauth-endpoint",
+        "oauthMigrationEndpoint": "https://example.com/oauth2/porting-access-endpoint"
+    }
+}</pre>
 
       <h3>Role of destination server in discovery</h3>
 
@@ -504,7 +505,10 @@
     "id": "https://oakfrost.example.com/brock",
     "type": "Person",
     "name": "Brock Oakfrost",
-    "accountPortabilityOauth": "https://example.com/oauth2/porting-access-endpoint",
+	"endpoints": {
+		"oauthAuthorizationEndpoint": "https://oakfrost.example.com/oauth2/standard-oauth-endpoint",
+		"oauthMigrationEndpoint": "https://oakfrost.example.com/oauth2/porting-access-endpoint"
+	},
     "inbox": "https://oakfrost.example.com/brock/inbox",
     "outbox": "https://oakfrost.example.com/brock/outbox",
     "following": "https://oakfrost.example.com/brock/following",
