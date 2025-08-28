@@ -507,17 +507,21 @@
     "accountPortabilityOauth": "https://example.com/oauth2/porting-access-endpoint",
     "inbox": "https://oakfrost.example.com/brock/inbox",
     "outbox": "https://oakfrost.example.com/brock/outbox",
-    "content": "https://oakfrost.example.com/brock/content",
     "following": "https://oakfrost.example.com/brock/following",
     "followers": "https://oakfrost.example.com/brock/followers",
     "liked": "https://oakfrost.example.com/brock/liked",
     "blocked": "https://oakfrost.example.com/brock/blocked",
-    "migration": "https://oakfrost.example.com/brock/outbox"
+    "migration": {
+        "outbox": "https://oakfrost.example.com/brock/migration/outbox",
+        "content": "https://oakfrost.example.com/brock/migration/content",
+        "app:other": "https://oakfrost.example.com/brock/migration/app-specific-collection"
+    }
 }
 </pre>
 
     <p>Notes</p>
       <ul>
+		<li>The "migration" property contains all of the collections that can be migrated from this source actor.  This document specifies the "migration outbox" and the "content collection", which are both defined below. Applications MAY define their own application-specific collections, which will be defined more rigorously in a future version of this specification.</li>
         <li>
           Actor names (not only the 'name' property but also the portion of the Actor ID that contains the name if applicable) may differ at the source and destination, and may be different than the names used as user identifiers by either system.  A user with an account identity such as “Alice” may transfer the “DeepThoughts” actor data on server A “@deepthoughts@a.example” to a “PhilosophicalMusings” actor owned by the account “AMuse” “@philomuse@b.example”, as long as she can log into both accounts and has permissions to authorize the transfer on both ends.
         </li>
@@ -635,28 +639,44 @@
         suspension. 
       </p>
 
-
       <h3>Migration Outbox</h3>
+	  <p>
+		The migration outbox is intended as a simple way for applications to enable LOLA account migration.  Servers implementing LOLA MUST include this collection in actor's profiles, as it will provide maximum compatibility with other ActivityPub software.
+		This collection SHOULD contain a filtered view of all the actor's activities that the source server deems eligible for migration.  The source server MAY filter out activities that are not relevant to the destination server, or that the user has chosen to exclude during the OAuth authorization step.
+	  </p>
       <p>
-        The destination server MUST use the migration outbox in lieu of the regular outbox if the migration outbox URL 
-        is different.  This allows the source server some flexibility that may be important, in how it fetches and 
+        When migrating user's data, the destination server MUST use the migration outbox in lieu of the regular outbox if the migration outbox URL is different.  This allows the source server some flexibility that may be important, in how it fetches and 
         presents data for account migration differently than for regular use.
       </p>
 
       <h3>Content Collection</h3>
 
+	  <p>The content collection represents the <i>current state</i> of all of the actor's content, separate from the specific Activities (such as `Create`, `Delete`, `Undo`, and `Update`) that have been performed on the objects during their lifetimes.</p>
       <p>
-        The source server SHOULD include these object types in the content collection:
+        The source server SHOULD include object types such as these in the content collection:
       </p>
       <ul>
-        <li>
-          Note and other Activity types that have content.
+        <li>All objects owned by the user, such as  
+          <a href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-article" target="_blank">Article</a>, 
+		  <a href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-audio" target="_blank">Audio</a>, 
+		  <a href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-document" target="_blank">Document</a>, 
+		  <a href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-event" target="_blank">Event</a>, 
+		  <a href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-image" target="_blank">Image</a>, 
+		  <a href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-note" target="_blank">Note</a>, 
+		  <a href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-page" target="_blank">Page</a>, 
+		  <a href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-place" target="_blank">Place</a>, 
+		  <a href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-profile" target="_blank">Profile</a>, 
+		  <a href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-relationship" target="_blank">Relationship</a>, 
+		  and <a href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-video" target="_blank">Video</a> 
+		  objects, along with any application-specific objects that also contain user-generated content.
         </li>
         <li>
-          Media objects that are hosted by the source server - if it is a resource that would go away if the source 
+          Media objects (such as images, videos, or audio files) that are hosted by the source server - if it is a resource that would go away if the source 
           server were to receive an account deletion request, then it should be here for fetching over.
         </li>
       </ul>
+
+	  <p>The source server SHOULD NOT include <a href="https://www.w3.org/TR/activitystreams-vocabulary/#dfn-tombstone" target="_blank">Tombstone</a> objects in the content collection.</p>
 
       <p>
         The source server MUST NOT include content wrapper or content modification activities in the content collection, 
@@ -693,7 +713,7 @@
       </p>
 
       <p>
-        Open Issues:  Is there a way to negotiate what extended features are recognized and whether the source should downgrade structured info?  Is there already a way to request posts in one format or another? 
+        Open Issues:  Is there a way to negotiate what extended features are recognized and whether the source should downgrade structured info?  Is there already a way to request posts in one format or another? -- Perhaps this is addressed by the ability to defined additional collections in the "migration" property.
       </p>
 
       <h3>Actor Information</h3>
