@@ -641,8 +641,10 @@
 
       <h3>Migration Outbox</h3>
 	  <p>
-		The migration outbox is intended as a simple way for applications to enable LOLA account migration.  Servers implementing LOLA MUST include this collection in actor's profiles, as it will provide maximum compatibility with other ActivityPub software.
-		This collection SHOULD contain a filtered view of all the actor's activities that the source server deems eligible for migration.  The source server MAY filter out activities that are not relevant to the destination server, or that the user has chosen to exclude during the OAuth authorization step.
+		The migration outbox is intended as a simple way for applications to enable LOLA account migration.  Servers implementing LOLA MUST include this collection in actor profiles, as it will provide maximum compatibility with other ActivityPub software.
+	  </p>
+      <p>
+        This collection SHOULD contain a filtered view of all the actor's activities that the source server deems eligible for migration.  The source server MAY filter out activities that are not relevant to the destination server, or that the user has chosen to exclude during the OAuth authorization step.
 	  </p>
       <p>
         When migrating user's data, the destination server MUST use the migration outbox in lieu of the regular outbox if the migration outbox URL is different.  This allows the source server some flexibility that may be important, in how it fetches and 
