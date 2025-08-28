@@ -781,7 +781,7 @@
       <h4>Change Type Activities</h4>
 
       <p>
-        Add, Update, Undo, Remove, Tombstone and Delete activities should not be copied.  Rather than propagate these, the 
+        Add, Update, Undo, Remove and Delete activities should not be copied.  Rather than propagate these, the 
         results of changes SHOULD be provided by the source server.  
       </p>
 
@@ -793,7 +793,7 @@
       </p>
 
       <p>
-        Another example, if a server posts a Note then replaces that with a Tombstone activity, the Tombstone activity 
+        Another example, if a server posts a Note then replaces that with a Tombstone object, the Tombstone object 
         SHOULD be omitted by the source and SHOULD NOT be copied by the destination.  
       </p>
 
@@ -841,7 +841,6 @@
       <p>
         <b>Question</b> activities SHOULD be copied but the destination MAY close them when copying if they are not closed.
       </p>
-
 
       <h3>
         Load Management During Fetdching of Content
