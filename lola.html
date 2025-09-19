@@ -482,7 +482,7 @@
 
       <h3>Role of destination server in discovery</h3>
 
-      <p>If the destination server finds the account portability OAuth endpoint via the [RFC8414] ".well-known" approach, it MUST gain authorization and use its account migration authorization token when doing feature discovery.   </p>
+      <p>If the destination server finds the account portability OAuth endpoint via the [RFC8414] ".well-known" approach, it MUST gain authorization and use its account migration authorization token when doing feature discovery.</p>
 
       <p>If the destination server requests the Actor object before gaining authorization, it MUST request the Actor object again using its account migration authorization token to do feature discovery.</p>
 
@@ -514,6 +514,8 @@
     "migration": {
         "outbox": "https://oakfrost.example.com/brock/migration/outbox",
         "content": "https://oakfrost.example.com/brock/migration/content",
+        "following": "https://oakfrost.example.com/brock/migration/following",
+        "blocked": "https://oakfrost.example.com/brock/migration/blocked",
         "app:other": "https://oakfrost.example.com/brock/migration/app-specific-collection"
     }
 }
@@ -521,7 +523,11 @@
 
     <p>Notes</p>
       <ul>
-		<li>The "migration" property contains all of the collections that can be migrated from this source actor.  This document specifies the "migration outbox" and the "content collection", which are both defined below. Applications MAY define their own application-specific collections, which will be defined more rigorously in a future version of this specification.</li>
+		<li>The "migration" property contains all of the data that can be migrated from this source actor.</li>
+		<li>The "migration" property SHOULD include a "migration outbox" (defined below) that allows target servers to pull all activities from the source server. Target servers SHOULD use this outbox to import all of the actor's previous activities.</li>  
+		<li>The "migration" property SHOULD include a "content collection" (defined below) that includes all of the content associated with this actor (posts, uploads, etc). Target servers SHOULD use this collection to import all of the actor's content.</li>
+		<li>The "migration" property SHOULD include "following" and "blocked" collections, which mirror the actor's public "following" and "blocked" collections. These are listed here so that the source server can explicitly declare the data that can be migrated. In some instances, the contents of these "migration" collections may be different from the publicly available collections -- for example, if an actor has "blocked" someone but has not published this to their public profile.</li>
+		<li>Applications MAY define additional collections to be migrated, and these will be defined more rigorously in a future version of this specification.</li>
         <li>
           Actor names (not only the 'name' property but also the portion of the Actor ID that contains the name if applicable) may differ at the source and destination, and may be different than the names used as user identifiers by either system.  A user with an account identity such as “Alice” may transfer the “DeepThoughts” actor data on server A “@deepthoughts@a.example” to a “PhilosophicalMusings” actor owned by the account “AMuse” “@philomuse@b.example”, as long as she can log into both accounts and has permissions to authorize the transfer on both ends.
         </li>
@@ -532,7 +538,6 @@
           URL discovery allows the account migration “outbox” to be different from the normal outbox if the source server prefers to implement it at a different URL, but it can also be the same URL.  There may be a number of differences between migration outbox and regular outbox, caused by permissions settings, filtering unnecessary items, filters explicitly chosen by the user, or other reasons we can't foresee now.  That said, a simple implementation can probably be successful using the same URL for both. 
         </li>
       </ul>
-
 
     </section>
 
@@ -721,15 +726,15 @@
       <h3>Actor Information</h3>
 
       <p>
-        The <b>Following</b> collection as per 
-        <a href="https://www.w3.org/TR/activitypub/#following">https://www.w3.org/TR/activitypub/#following</a> SHOULD be 
-        provided on the Actor object when accessed with the account migration authorization token.  
+        The new migration property includes a <b>Following</b> collection that mirrors the publicly available 
+        <a href="https://www.w3.org/TR/activitypub/#following">Following</a> property. This new property is
+		used so that source servers can provide additional information that may not be accessible in the publicly available collection. For instance, some "following" records may not be visible publicly, but may still need to be transferred to the destination server. In this case, the "un-published" follows would appear in the migration collection even if they do not appear on the source server.
       </p>
 
       <p>
-        If the source server does blocking, the personal block list SHOULD be fetchable at the URL advertised on the Actor 
-        object, as per <a href="https://codeberg.org/fediverse/fep/src/branch/main/fep/c648/fep-c648.md"
-        >https://codeberg.org/fediverse/fep/src/branch/main/fep/c648/fep-c648.md</a>
+        The new migration property also includes a <b>Blocked</b> collection that mirrors the publicly available
+		<a href="https://codeberg.org/fediverse/fep/src/branch/main/fep/c648/fep-c648.md">Blocked</a> property.
+		If the actor has a personal block list, then this information SHOULD be fetchable from this property.  This new property is used so that source servers can provide additional information that may not be accessible in the publicly available collection. For instance, actors may "block" others without publishing this information on their profile. In this case, the "un-published" block would appear in the migration collection even if it does not appear on the source server.
       </p>
 
       <p>
