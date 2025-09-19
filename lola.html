@@ -586,7 +586,7 @@
         <li>client_id parameter OR DPoP header</li>
       </ul>
 
-      <p>The `client_id` ([OAuth2](https://www.rfc-editor.org/rfc/rfc6749.html)) or DPoP proof ([RFC9449](https://www.rfc-editor.org/rfc/rfc9449.html)) are intended to prove that the OAuth client (the account destination)
+      <p>The `client_id` <a href="https://www.rfc-editor.org/rfc/rfc6749.html">OAuth2</a> or DPoP proof <a href="https://www.rfc-editor.org/rfc/rfc9449.html">RFC9449</a> are intended to prove that the OAuth client (the account destination)
       is who they say they are.  In the Fediverse, servers offering account portability may not care whether the destination 
       is verified — it could be enough that the user authorizes access, or that the `redirect_uri` has the domain 
       of a known Fediverse service.  However, if the source server cares to do a more rigorous check, it can either require a 
