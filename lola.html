@@ -16,7 +16,7 @@
         discussionUrl: "https://github.com/swicg/activitypub-data-portability/issues/",
         github: "",
         shortName: "LOLA",
-        group: "socialcg"
+        group: "socialcg",
         otherLinks: [
           {
             key: "Related documents",
@@ -1115,11 +1115,11 @@
       "id": "https://lemongrove.example.co.uk/2016/05/minimal-activitypub"
     }
   ],
-  "attributedTo": "https://newsite.example.org/aurora/"
+  "attributedTo": "https://newsite.example.org/aurora/",
   "to": ["https://lemongrove.example.co.uk/followers"],
   "type": "Article",
   "published": "2014-12-12T12:12:12Z",
-  "content": "&lt;div&gt;Article is in here... &lt;/div&gt;",
+  "content": "&lt;div&gt;Article is in here... &lt;/div&gt;"
 }
       </pre></code>
 
@@ -1140,11 +1140,11 @@
                  {"@language": "en"}],
     "id": "https://newsite.example.org/aurora/items/02751cab-7dd7-416b-905b-...",
     "previously": ["https://lemongrove.example.co.uk/2016/05/minimal-activitypub"],
-    "attributedTo": "https://newsite.example.org/aurora/"
+    "attributedTo": "https://newsite.example.org/aurora/",
     "to": ["https://lemongrove.example.co.uk/followers"],
     "type": "Article",
     "published": "2014-12-12T12:12:12Z",
-    "content": "&lt;div&gt;Article is in here... &lt;/div&gt;",
+    "content": "&lt;div&gt;Article is in here... &lt;/div&gt;"
   }
 }
       </pre>
@@ -1157,9 +1157,8 @@
   "actor": "https://newsite.example.org/aurora",
   "id": "https://newsite.example.org/aurora/items/e2495916-877c-4428-8ada-c199508ad855",
   "to": [...],
-  "type": ["Copy", "Create"]
-  "object": "https://newsite.example.org/aurora/items/02751cab-7dd7-416b-905b-...",
-  }
+  "type": ["Copy", "Create"],
+  "object": "https://newsite.example.org/aurora/items/02751cab-7dd7-416b-905b-..."
 }
       </pre>
 
@@ -1169,7 +1168,6 @@
         A like originating from a moved account may look like this when fetched - note the actor and ID are both dereferenceable for the new server, and the ‘previously’ value shows older IDs.  Note also that the Like has some old and possibly obsolete 'to' addresses.  The Like was originally distributed to Cherry's followers when Cherry was on mistywing.example.org, not to Cherry's followers at newserver.example.org, and the 'to' addresses do not have to be rewritten to try to translate to different follower lists at different locations.  
       </p>
       <pre>
-
 {
   "@context": ["https://www.w3.org/ns/activitystreams",
                {"@language": "en"}],
@@ -1185,7 +1183,6 @@
          "https://lemongrove.example.co.uk/followers/"],
   "cc": "https://oakfrost.example.com/brock"
 }
-
       </pre>
 
       <p>
